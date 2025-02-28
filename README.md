@@ -11,7 +11,7 @@ We incorporate knowledge distillation by using pre-trained baseline models as te
 Flexible Role-specific Model Type Assignment:
 Our evaluation framework now allows users to specify different model types for each role (landlord, landlord_up, and landlord_down) via command-line arguments, facilitating detailed comparisons between various architectures (e.g., LSTM, Transformer with attention pooling, and hybrid variants).
 
-Transformer Baseline(Still Working): https://drive.google.com/file/d/1T8tpnZy4DllAqKhd7LIjcZWUDoTqfssw/view?usp=drive_link
+Transformer Baseline(Demo): https://drive.google.com/file/d/1T8tpnZy4DllAqKhd7LIjcZWUDoTqfssw/view?usp=drive_link
 
 ## Installation
 The training code is designed for GPUs. Thus, you need to first install CUDA if you want to train models. You may refer to [this guide](https://docs.nvidia.com/cuda/index.html#installation-guides). For evaluation, CUDA is optional and you can use CPU for evaluation.
