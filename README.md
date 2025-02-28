@@ -1,4 +1,5 @@
-New Features and Improvements
+## New Features and Improvements
+
 Building upon the original DouZero framework, our work introduces the following enhancements:
 
 Enhanced Transformer Encoder with Attention Pooling:
