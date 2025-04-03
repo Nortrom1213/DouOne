@@ -1,15 +1,49 @@
-## New Features and Improvements
+# New Features
 
-Building upon the original DouZero framework, our work introduces the following enhancements:
+We have extended the original DouZero codebase with several new features to provide greater flexibility and improved performance:
 
-Enhanced Transformer Encoder with Attention Pooling:
-We replace the LSTM with a Transformer encoder that includes positional encoding. Instead of merely using the last time step, our model applies an attention pooling mechanism to weight and fuse information from all time steps, yielding a richer and more comprehensive history representation.
+1. **`--model_type` Argument**  
+   - **Options:** `lstm` (default) or `transformer`.  
+   - **Usage Example:**  
+     ```bash
+     python3 train.py --model_type transformer
+     ```
+   - **Description:**  
+     - `lstm`: Uses the original LSTM-based network from DouZero.  
+     - `transformer`: Replaces LSTM with a 2-layer Transformer encoder for processing historical states, potentially offering better handling of long-range dependencies.
 
-Hybrid Teacher-Student Framework with Decaying Distillation Loss:
-We incorporate knowledge distillation by using pre-trained baseline models as teachers. The teacher loss weight is designed to decay over time, so that the student model benefits from teacher supervision during early training and gradually relies on its own learned policy in later stages.
+2. **Optimizers**  
+   - **New Argument:** `--optimizer` with choices `rmsprop`, `adam`, and `adamw`.  
+   - **Usage Example:**  
+     ```bash
+     python3 train.py --optimizer adamw --weight_decay 0.01
+     ```
+   - **Description:**  
+     - By default, DouZero uses `rmsprop`. You can now opt for `adam` or `adamw`. If `adamw` is selected, you can adjust `--weight_decay` for L2 regularization.
 
-Flexible Role-specific Model Type Assignment:
-Our evaluation framework now allows users to specify different model types for each role (landlord, landlord_up, and landlord_down) via command-line arguments, facilitating detailed comparisons between various architectures (e.g., LSTM, Transformer with attention pooling, and hybrid variants).
+3. **Knowledge Distillation (Teacher Models)**  
+   - **Arguments:**
+     - `--teacher_mode`: Enables knowledge distillation during training.
+     - `--teacher_landlord`, `--teacher_landlord_up`, `--teacher_landlord_down`: Paths to teacher checkpoints for each position.
+     - `--teacher_loss_weight`: Initial distillation loss weight.
+     - `--teacher_loss_final`: Final distillation loss weight after linear decay.
+     - `--teacher_loss_decay_steps`: Number of frames over which teacher loss decays.
+     - `--teacher_temperature`: Temperature parameter for softening teacher logits.
+   - **Usage Example:**  
+     ```bash
+     python3 train.py --teacher_mode \
+       --teacher_landlord baselines/douzero_ADP/landlord.ckpt \
+       --teacher_landlord_up baselines/douzero_ADP/landlord_up.ckpt \
+       --teacher_landlord_down baselines/douzero_ADP/landlord_down.ckpt \
+       --teacher_loss_weight 1.0 \
+       --teacher_loss_final 0.1 \
+       --teacher_loss_decay_steps 50000000
+     ```
+   - **Description:**  
+     - Allows you to train a student model using teacher signals from pretrained DouZero-based models.  
+     - The distillation loss weight decreases over time, so the student eventually learns to surpass the teacher’s strategies.
+
+---
 
 Transformer Baseline(Demo): https://drive.google.com/file/d/1T8tpnZy4DllAqKhd7LIjcZWUDoTqfssw/view?usp=drive_link
 
