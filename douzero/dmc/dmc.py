@@ -173,9 +173,12 @@ def train(flags):
     position_frames = {'landlord':0, 'landlord_up':0, 'landlord_down':0}
 
     # Load models if any
+    # In your train(flags) function, replace the checkpoint-loading section with the following:
+
     if flags.load_model and os.path.exists(checkpointpath):
         checkpoint_states = torch.load(
-            checkpointpath, map_location=("cuda:"+str(flags.training_device) if flags.training_device != "cpu" else "cpu")
+            checkpointpath,
+            map_location=("cuda:" + str(flags.training_device) if flags.training_device != "cpu" else "cpu")
         )
         for k in ['landlord', 'landlord_up', 'landlord_down']:
             learner_model.get_model(k).load_state_dict(checkpoint_states["model_state_dict"][k])
@@ -185,6 +188,16 @@ def train(flags):
         stats = checkpoint_states["stats"]
         frames = checkpoint_states["frames"]
         position_frames = checkpoint_states["position_frames"]
+
+        # Instead of saving teacher_loss_weight in the checkpoint, recalculate it based on the loaded frames.
+        # Assume you have defined teacher_loss_weight_init, teacher_loss_final, and teacher_loss_decay_steps in your arguments.
+        current_teacher_weight = flags.teacher_loss_weight - (
+                flags.teacher_loss_weight - flags.teacher_loss_final
+        ) * (frames / flags.teacher_loss_decay_steps)
+        if current_teacher_weight < flags.teacher_loss_final:
+            current_teacher_weight = flags.teacher_loss_final
+        flags.teacher_loss_weight = current_teacher_weight
+
         log.info(f"Resuming preempted job, current stats:\n{stats}")
 
     # Starting actor processes
