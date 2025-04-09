@@ -45,7 +45,7 @@ We have extended the original DouZero codebase with several new features to prov
 
 ---
 
-Transformer Baseline(Demo): https://drive.google.com/file/d/1T8tpnZy4DllAqKhd7LIjcZWUDoTqfssw/view?usp=drive_link
+Pretrained Transformer Baseline: [https://drive.google.com/file/d/1T8tpnZy4DllAqKhd7LIjcZWUDoTqfssw/view?usp=drive_link](https://drive.google.com/file/d/1DpQMcs0y6P7shjGYDULqyTgLHkH57cf0/view?usp=drive_link)
 
 ## Installation
 The training code is designed for GPUs. Thus, you need to first install CUDA if you want to train models. You may refer to [this guide](https://docs.nvidia.com/cuda/index.html#installation-guides). For evaluation, CUDA is optional and you can use CPU for evaluation.
